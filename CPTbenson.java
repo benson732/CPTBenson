@@ -25,18 +25,19 @@ public class CPTbenson{
                 con.println("Choose a category:");
                 con.println("1. MCU");
                 con.println("2. DC");
-                con.println("3. Hip-Hop");
+                con.println("3. HipHop");
                 int intCategory = getValidatedInt(con, "Enter your category: ");
 
                 String[][] strSelectedQuestions = null;
 
                 if (intCategory == 1) {
-                    strSelectedQuestions = loadMCUQuestions();
+                    strSelectedQuestions = loadQuestionsFromFile("MCU.txt");
                 } else if (intCategory == 2) {
-                    strSelectedQuestions = loadDCQuestions();
+                    strSelectedQuestions = loadQuestionsFromFile("DC.txt");
                 } else if (intCategory == 3) {
-                    strSelectedQuestions = loadHipHopQuestions();
+                    strSelectedQuestions = loadQuestionsFromFile("HipHop.txt");
                 } else {
+            
                     con.println("Invalid category.");
                     continue;
                 }
@@ -68,55 +69,26 @@ public class CPTbenson{
             }
         }
 	}
-			// MCU questions array
-    public static String[][] loadMCUQuestions() {
-        return new String[][] {
-            {"Who is the new Sorcerer Supreme after Doctor Strange?", "Wong", "Mordo", "Strange", "Clea", "Wong"},
-            {"What material is Captain America’s shield made of?", "Adamantium", "Vibranium", "Titanium", "Steel", "Vibranium"},
-            {"Who created Ultron in the Marvel Cinematic Universe?", "Bruce Banner", "Tony Stark", "Hank Pym", "Steve Rogers", "Tony Stark"},
-            {"What is the name of Thor’s enchanted hammer?", "Mjolnir", "Stormbreaker", "Excalibur", "Aegis", "Mjolnir"},
-            {"Which Infinity Stone does Vision have embedded in his forehead?", "Mind Stone", "Power Stone", "Time Stone", "Reality Stone", "Mind Stone"},
-            {"What is Black Widow’s real name?", "Natasha Romanoff", "Wanda Maximoff", "Yelena Belova", "Melina Vostokoff", "Natasha Romanoff"},
-            {"Who is the main villain in the first Avengers movie?", "Loki", "Thanos", "Ultron", "Red Skull", "Loki"},
-            {"What is the name of T’Challa’s home country in Black Panther?", "Wakanda", "Sokovia", "Genosha", "Latveria", "Wakanda"},
-            {"What is the name of the AI assistant that replaces JARVIS in Tony Stark’s suit?", "FRIDAY", "EDITH", "KAREN", "VISION", "FRIDAY"},
-            {"Who rescues Tony Stark and Nebula from space in Avengers: Endgame?", "Captain Marvel", "Thor", "Rocket Raccoon", "Doctor Strange", "Captain Marvel"}
-        };
+	
+		// Load questions from a file
+    public static String[][] loadQuestionsFromFile(String fileName) {
+        String[][] questions = new String[10][6];
+        TextInputFile file = new TextInputFile(fileName);
+        int index = 0;
+        while (!file.eof() && index < 10) {
+            String line = file.readLine();
+            String[] parts = line.split("\\|"); // Split by "|" delimiter
+            if (parts.length == 6) {
+                questions[index] = parts;
+                index++;
+            }
+        }
+        file.close();
+        return questions;
     }
 
-			// DC questions array
-    public static String[][] loadDCQuestions() {
-        return new String[][] {
-            {"What is Superman’s birth name?", "Clark Kent", "Kal-El", "Jor-El", "Zor-El", "Kal-El"},
-            {"What is the name of Batman’s butler?", "Alfred Pennyworth", "Lucius Fox", "James Gordon", "Harvey Dent", "Alfred Pennyworth"},
-            {"Who is Wonder Woman’s father in the DC Universe?", "Zeus", "Ares", "Hades", "Poseidon", "Zeus"},
-            {"What city does The Flash protect?", "Central City", "Gotham City", "Star City", "Metropolis", "Central City"},
-            {"What is the name of Aquaman’s underwater kingdom?", "Atlantis", "Lemuria", "Asgard", "Themyscira", "Atlantis"},
-            {"What superpower does Green Lantern’s ring grant?", "Energy Constructs", "Flight", "Super Strength", "Invisibility", "Energy Constructs"},
-            {"What is the Joker’s real name in the film Joker (2019)?", "Arthur Fleck", "Jack Napier", "Jerome Valeska", "Joseph Kerr", "Arthur Fleck"},
-            {"What is the name of Batman’s secret headquarters?", "Batcave", "Watchtower", "Fortress of Solitude", "Hall of Justice", "Batcave"},
-            {"Who plays Harley Quinn in the DCEU films?", "Margot Robbie", "Gal Gadot", "Amber Heard", "Amy Adams", "Margot Robbie"},
-            {"Who is the main villain in the Justice League movie (2017)?", "Steppenwolf", "Darkseid", "Lex Luthor", "Brainiac", "Steppenwolf"}
-        };
-    }
 
-			// Hip-Hop questions array
-    public static String[][] loadHipHopQuestions() {
-        return new String[][] {
-            {"Who is known as the Godfather of Rap?", "DJ Kool Herc", "Grandmaster Flash", "Tupac Shakur", "Rakim", "DJ Kool Herc"},
-            {"Which artist released the album “To Pimp a Butterfly”?", "Kendrick Lamar", "J. Cole", "Drake", "Kanye West", "Kendrick Lamar"},
-            {"What is the name of Jay-Z’s record label?", "Roc-A-Fella Records", "Death Row Records", "Bad Boy Records", "No Limit Records", "Roc-A-Fella Records"},
-            {"Which group is known for the hit song “Straight Outta Compton”?", "N.W.A", "Public Enemy", "Run DMC", "Beastie Boys", "N.W.A"},
-            {"Who is the first rapper to win a Pulitzer Prize?", "Kendrick Lamar", "Eminem", "Nas", "Jay-Z", "Kendrick Lamar"},
-            {"Which rapper is also known as Slim Shady?", "Eminem", "Snoop Dogg", "50 Cent", "Dr. Dre", "Eminem"},
-            {"What was Tupac Shakur’s stage name?", "2Pac", "Biggie", "Ice-T", "Nas", "2Pac"},
-            {"Who founded the record label Death Row Records?", "Dr. Dre", "Suge Knight", "Tupac", "Ice Cube", "Suge Knight"},
-            {"Which rapper is known as the 6 God?", "Drake", "Lil Wayne", "Travis Scott", "Post Malone", "Drake"},
-            {"What city is commonly referred to as the birthplace of hip-hop?", "New York", "Los Angeles", "Chicago", "Atlanta", "New York"}
-        };
-    }
-
-			// Method to play the game
+		// Method to play the game
     public static void playGame(Console con, String[][] strQuestions, String strPlayerName) {
         if (strQuestions == null || strQuestions.length == 0) {
             con.println("No questions available for this category.");
